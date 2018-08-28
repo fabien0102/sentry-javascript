@@ -132,7 +132,9 @@ functions all allow passing additional data to be tagged onto the error.
 
         Raven.wrap({
           tags: {git_commit: 'c0deb10c4'}
-        }, function () { /* ... */ });
+        }, function () {
+          // ...
+        });
 
         // NOTE: Raven.wrap and Raven.context accept options as first argument
 
@@ -163,7 +165,9 @@ functions all allow passing additional data to be tagged onto the error.
 
         Raven.context({
           extra: {planet: {name: 'Earth'}}
-        }, function () { /* ... */ });
+        }, function () {
+          // ...
+        });
 
         // NOTE: Raven.wrap and Raven.context accept options as first argument
 
@@ -185,6 +189,10 @@ functions all allow passing additional data to be tagged onto the error.
         delete extra['FieldKeyToDelete'];
         Raven.setExtraContext();            // Clear all extra data from the context.
         Raven.setExtraContext(extra);       // Add back the extra data that you want to keep.
+
+**Be aware of maximal payload size** - There are times, when you want to send a whole application state as an extra data.
+This can be quite a large object, which can easily weigh more than 200kB, which is currently maximamal payload size of a single event sent to Sentry.
+When this happens, you'll get an ``HTTP Error 413 Payload Too Large`` as the server response or (when ``keepalive: true`` is set as ``fetch`` parameter) request will stay in ``pending`` state forever (eg. in Chrome).
 
 .. _raven-js-recording-breadcrumbs:
 
